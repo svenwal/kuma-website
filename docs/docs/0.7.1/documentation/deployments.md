@@ -75,7 +75,7 @@ When running in multi-zone mode, we introduce the notion of a `global` and `remo
 
 In this deployment, a Kuma cluster is made of one global control plane and as many remote control planes as the number of zones that we want to support:
 
-* **Zone**: A zone identifies a Kubernetes cluster, a VPC, or any other cluster that we want to include in a Kuma service mesh.
+* **Zone**: A zone identifies a Kubernetes cluster, a VPC, or any other cluster that we want to include in a Kuma service mesh. Valid characters are numbers, lowercase latin letters and '-', '_' symbols.
 
 <center>
 <img src="/images/docs/0.6.0/distributed-diagram.jpg" alt="" style="width: 500px; padding-top: 20px; padding-bottom: 10px;"/>
@@ -145,6 +145,8 @@ $ KUMA_MODE=global kuma-cp run
 
 Start the `remote` control planes in each zone that will be part of the multi-zone Kuma deployment.
 
+The `<global-kds-address>` is the hostname/ip **and** port of the global control plane - if you have not changed the global control plane ports the port is 5685. Example: 123.123.123.123:5685
+
 :::: tabs :options="{ useUrlFragment: false }"
 ::: tab "Kubernetes"
 ```sh
@@ -184,7 +186,7 @@ KUMA_MULTICLUSTER_REMOTE_ZONE=<zone-name> \
 KUMA_MULTICLUSTER_REMOTE_GLOBAL_ADDRESS=grpcs://<global-kds-address> ./kuma-cp run
 ```
 
-Where `<zone-name>` is the name of the zone mathcing one of the Zone resources to be created at the Global CP. `<global-remote-sync-address>` is the public address as obtained during the Global CP deployment step.
+Where `<zone-name>` is the name of the zone matching one of the Zone resources to be created at the Global CP. `<global-remote-sync-address>` is the public address as obtained during the Global CP deployment step.
 
 Add an `ingress` dataplane, so `kuma-cp` can expose its services for cross-cluster communication.
 
@@ -209,7 +211,7 @@ Adding more dataplanes can be done locally by following the Use Kuma section in 
 ::::
 
 
-### Create the Zone resources
+### Create the Zone resources on global control plane
 
 :::: tabs :options="{ useUrlFragment: false }"
 ::: tab "Kubernetes"
